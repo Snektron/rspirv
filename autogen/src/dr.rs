@@ -257,6 +257,7 @@ pub fn gen_dr_operand_kinds(grammar: &[structs::OperandKind]) -> TokenStream {
         let num_kinds = vec![
             (format_ident!("LiteralBit32"), quote! {u32}),
             (format_ident!("LiteralBit64"), quote! {u64}),
+            (format_ident!("LiteralBit128"), quote! {u128}),
             (format_ident!("LiteralExtInstInteger"), quote! {u32}),
             (
                 format_ident!("LiteralSpecConstantOpInteger"),
@@ -335,7 +336,7 @@ pub fn gen_dr_operand_kinds(grammar: &[structs::OperandKind]) -> TokenStream {
         // impl fmt::Display for dr::Operand.
         let mut kinds = kinds;
         kinds.extend(
-            ["LiteralBit32", "LiteralBit64"]
+            ["LiteralBit32", "LiteralBit64", "LiteralBit128"]
                 .iter()
                 .cloned()
                 .map(as_ident),

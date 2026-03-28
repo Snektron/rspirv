@@ -2,7 +2,7 @@ use crate::binary::tracker::Type;
 use crate::binary::tracker::Type::{Float, Integer};
 use crate::dr;
 use crate::dr::Operand;
-use crate::dr::Operand::{LiteralBit32, LiteralBit64};
+use crate::dr::Operand::{LiteralBit32, LiteralBit64, LiteralBit128};
 use crate::spirv;
 
 use super::tracker;
@@ -205,6 +205,9 @@ fn disas_constant(inst: &dr::Instruction, type_tracker: &tracker::TypeTracker) -
         LiteralBit64(value) => disas_instruction(inst, " ", |_| {
             disas_literal_bit_operand(value, &literal_type.unwrap())
         }),
+        LiteralBit128(value) => disas_instruction(inst, " ", |_| {
+            disas_literal_bit_operand(value, &literal_type.unwrap())
+        }),
         _ => inst.disassemble(),
     }
 }
@@ -237,6 +240,17 @@ impl DisassembleLiteralBit for u64 {
         }
     }
 }
+
+impl DisassembleLiteralBit for u128 {
+    fn disas_literal_bit(value: u128, literal_type: &Type) -> String {
+        match literal_type {
+            Integer(_, true) => (value as i128).to_string(),
+            Integer(_, false) => value.to_string(),
+            Float(_) => unreachable!(),
+        }
+    }
+}
+
 
 fn disas_ext_inst(
     inst: &dr::Instruction,

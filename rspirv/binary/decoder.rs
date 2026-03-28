@@ -193,6 +193,17 @@ impl Decoder<'_> {
         Ok((high << 32) | low)
     }
 
+    /// Decodes and returns the next two SPIR-V words as a 128-bit
+    /// literal bit pattern.
+    pub fn bit128(&mut self) -> Result<u128> {
+        let a = u128::from(self.word()?);
+        let b = u128::from(self.word()?);
+        let c = u128::from(self.word()?);
+        let d = u128::from(self.word()?);
+        Ok((d << 96) | (c << 64) | (b << 32) | a)
+    }
+
+
     /// Decodes and returns the next SPIR-V word as a 32-bit
     /// extended-instruction-set number.
     pub fn ext_inst_integer(&mut self) -> Result<u32> {

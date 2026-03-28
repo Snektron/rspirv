@@ -76,6 +76,7 @@ impl Assemble for dr::Operand {
             | Self::LiteralBit32(v)
             | Self::LiteralExtInstInteger(v) => result.push(v),
             Self::LiteralBit64(v) => result.extend([v as u32, (v >> 32) as u32]),
+            Self::LiteralBit128(v) => result.extend([v as u32, (v >> 32) as u32, (v >> 64) as u32, (v >> 96) as u32]),
             Self::LiteralSpecConstantOpInteger(v) => result.push(v as u32),
             Self::LiteralString(ref v) => assemble_str(v, result),
             Self::RayFlags(ref v) => result.push(v.bits()),

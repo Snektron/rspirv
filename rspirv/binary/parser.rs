@@ -319,6 +319,7 @@ impl<'c, 'd> Parser<'c, 'd> {
                     16 => Ok(dr::Operand::LiteralBit32(self.decoder.bit32()?)),
                     32 => Ok(dr::Operand::LiteralBit32(self.decoder.bit32()?)),
                     64 => Ok(dr::Operand::LiteralBit64(self.decoder.bit64()?)),
+                    128 => Ok(dr::Operand::LiteralBit128(self.decoder.bit128()?)),
                     _ => Err(State::TypeUnsupported(
                         self.decoder.offset(),
                         self.inst_index,

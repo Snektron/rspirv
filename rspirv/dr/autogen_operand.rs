@@ -68,6 +68,7 @@ pub enum Operand {
     IdRef(spirv::Word),
     LiteralBit32(u32),
     LiteralBit64(u64),
+    LiteralBit128(u128),
     LiteralExtInstInteger(u32),
     LiteralSpecConstantOpInteger(spirv::Op),
     LiteralString(String),
@@ -367,6 +368,11 @@ impl From<u64> for Operand {
         Self::LiteralBit64(o)
     }
 }
+impl From<u128> for Operand {
+    fn from(o: u128) -> Self {
+        Self::LiteralBit128(o)
+    }
+}
 impl From<spirv::Op> for Operand {
     fn from(o: spirv::Op) -> Self {
         Self::LiteralSpecConstantOpInteger(o)
@@ -445,6 +451,7 @@ impl fmt::Display for Operand {
             Operand::TensorOperands(ref v) => write!(f, "{:?}", v),
             Operand::LiteralBit32(ref v) => write!(f, "{:?}", v),
             Operand::LiteralBit64(ref v) => write!(f, "{:?}", v),
+            Operand::LiteralBit128(ref v) => write!(f, "{:?}", v),
         }
     }
 }
@@ -888,6 +895,12 @@ impl Operand {
         match *self {
             Self::LiteralBit64(v) => v,
             ref other => panic!("Expected Operand::LiteralBit64, got {} instead", other),
+        }
+    }
+    pub fn unwrap_literal_bit128(&self) -> u128 {
+        match *self {
+            Self::LiteralBit128(v) => v,
+            ref other => panic!("Expected Operand::LiteralBit128, got {} instead", other),
         }
     }
     pub fn unwrap_literal_ext_inst_integer(&self) -> u32 {
